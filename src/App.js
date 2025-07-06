@@ -7,11 +7,13 @@ import BHome from './Components/BHome'; // Adjust path if needed
 import Farticle from "./Components/ScienceArticle";
 import Sarticle from "./Components/BloodTypeCompatibility";
 import Tarticle from "./Components/DonationPreparation";
+import Landing from "./Components/LandingPage";
 function App() {
   return (
     <Router>
       <Routes>
-        <Route path="/" element={<SignUp />} />
+        <Route path="/" element={<Landing />} />
+          <Route path="/signup" element={<SignUp />} />
         <Route path="/login" element={<Login />} />
         <Route path="/donor-home" element={<DHome />} />
         <Route path="/bloodbank-home" element={<BHome />} />
