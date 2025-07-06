@@ -2,16 +2,23 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import '../Styles/Login.css';
- // if you're using CSS
 
 function Login() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState(null);
+    const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+
+        if (!email || !password) {
+            setError("Email and password are required");
+            return;
+        }
+
+        setLoading(true); // disable multiple clicks
 
         try {
             const response = await axios.post("http://localhost:8000/login", {
@@ -21,10 +28,13 @@ function Login() {
 
             if (response.data.success) {
                 const role = response.data.role;
-                console.log("User role from backend:", role); // Debug log ✅
 
-                if (role === 'Donor') {
+                console.log("User role from backend:", role);
+
+                if (role === 'Donor(Individual)') {
                     navigate('/donor-home');
+                } else if (role === 'Donor(BloodBank)') {
+                    navigate('/bloodbank-home');
                 } else if (role === 'Receiver') {
                     navigate('/receiver-home');
                 } else {
@@ -35,7 +45,9 @@ function Login() {
             }
         } catch (err) {
             console.error('Login error:', err);
-            setError('An error occurred.');
+            setError('Server error. Try again.');
+        } finally {
+            setLoading(false); // allow re-click
         }
     };
 
@@ -56,7 +68,9 @@ function Login() {
                     onChange={(e) => setPassword(e.target.value)}
                 />
                 {error && <div className="error">{error}</div>}
-                <button type="submit">Log In</button>
+                <button type="submit" disabled={loading}>
+                    {loading ? "Logging in..." : "Log In"}
+                </button>
                 <p>New user? <a href="/">Sign Up</a></p>
             </form>
         </div>

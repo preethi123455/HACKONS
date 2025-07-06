@@ -8,7 +8,7 @@ function SignUp() {
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const [role, setRole] = useState('Donor');
+    const [role, setRole] = useState('Donor(Individual)');
     const [error, setError] = useState(null);
 
     const handleSubmit = async (e) => {
@@ -18,8 +18,6 @@ function SignUp() {
             setError('All fields are required');
             return;
         }
-
-        console.log("Sending data to backend:", { name, email, password, role }); // 🧪 Debug
 
         try {
             const response = await axios.post('http://localhost:8000/signup', {
@@ -49,7 +47,8 @@ function SignUp() {
                 <input type="email" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} />
                 <input type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} />
                 <select value={role} onChange={(e) => setRole(e.target.value)}>
-                    <option value="Donor">Donor</option>
+                    <option value="Donor(Individual)">Donor (Individual)</option>
+                    <option value="Donor(BloodBank)">Donor (Blood Bank)</option>
                     <option value="Receiver">Receiver</option>
                 </select>
                 {error && <div className="error">{error}</div>}

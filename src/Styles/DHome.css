@@ -1,63 +1,33 @@
-/* DHome.css */
+/* Home.css */
 
-body {
-  margin: 0;
-  padding: 0;
-  font-family: 'Segoe UI', sans-serif;
-  background-color: #ffffff;
+.home-container {
+    text-align: center;
+    padding: 50px;
+    font-family: 'Segoe UI', sans-serif;
+    background-color: #fff;
+    color: #333;
 }
 
-.donor-home {
-  text-align: center;
-  padding: 60px 20px;
-  background-color: #ffffff;
-  min-height: 100vh;
+.home-container h1 {
+    color: #b30000;
+    margin-bottom: 10px;
 }
 
-.donor-home h1 {
-  font-size: 36px;
-  color: #000000;
-  margin-bottom: 10px;
+.actions {
+    margin-top: 30px;
 }
 
-.subtitle {
-  font-size: 16px;
-  color: #333;
-  margin-bottom: 40px;
+.actions button {
+    margin: 10px;
+    padding: 10px 20px;
+    font-size: 16px;
+    background-color: #b30000;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
 }
 
-.dashboard-options {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 16px;
-  max-width: 500px;
-  margin: 0 auto;
-}
-
-.dashboard-options button {
-  width: 100%;
-  padding: 16px 20px;
-  font-size: 16px;
-  font-weight: 600;
-  background-color: #ffffff;
-  color: #8B0000;
-  border: 2px solid #8B0000;
-  border-radius: 8px;
-  text-align: center;
-  transition: all 0.3s ease;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 10px;
-}
-
-.dashboard-options button:hover {
-  background-color: #8B0000;
-  color: #ffffff;
-  transform: translateY(-2px);
-}
-
-.dashboard-options button:active {
-  transform: scale(0.98);
+.actions button:hover {
+    background-color: #800000;
 }
