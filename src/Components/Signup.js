@@ -1,36 +1,46 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-
+import { useNavigate } from 'react-router-dom';
 
 function SignUp() {
+    const navigate = useNavigate();
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState(null);
 
     const handleSubmit = async (e) => {
-        e.preventDefault();
-        if (!name || !email || !password) {
-            setError('All fields are required.');
-            return;
-        }
+    e.preventDefault();
 
-        try {
-            const response = await axios.post("http://localhost:8000/signup", { name, email, password });
-            if (response.data.success) {
-                alert('Account created!');
-                setName('');
-                setEmail('');
-                setPassword('');
-                setError(null);
-            } else {
-                setError(response.data.message);
-            }
-        } catch (err) {
-            console.error('Signup error:', err);
-            setError('An error occurred.');
+    if (!name.trim() || !email.trim() || !password.trim()) {
+        setError('All fields are required.');
+        return;
+    }
+
+    try {
+        const response = await axios.post("http://localhost:8000/signup", { name, email, password });
+
+        if (response.data.success) {
+            alert('Account created!');
+            setName('');
+            setEmail('');
+            setPassword('');
+            setError(null);
+
+            // Redirect to login page
+            navigate('/login');
+        } else {
+            setError(response.data.message || 'Signup failed.');
         }
-    };
+    } catch (err) {
+        console.error('Signup error:', err);
+        if (err.response?.data?.message) {
+            setError(err.response.data.message);
+        } else {
+            setError('An error occurred. Please try again later.');
+        }
+    }
+};
 
     return (
         <div className="signup-page">
@@ -47,7 +57,7 @@ function SignUp() {
                         <input type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} />
                     </div>
                     {error && <div className="error-message">{error}</div>}
-                    <button type="submit" className="btn-submit">Sign Up</button>
+                    <button type="submit"  className="btn-submit">Sign Up</button>
                 </form>
             </div>
         </div>
