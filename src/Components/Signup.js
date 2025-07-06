@@ -1,65 +1,61 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import '../Styles/Signup.css';
 
 function SignUp() {
     const navigate = useNavigate();
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [role, setRole] = useState('Donor');
     const [error, setError] = useState(null);
 
     const handleSubmit = async (e) => {
-    e.preventDefault();
+        e.preventDefault();
 
-    if (!name.trim() || !email.trim() || !password.trim()) {
-        setError('All fields are required.');
-        return;
-    }
-
-    try {
-        const response = await axios.post("http://localhost:8000/signup", { name, email, password });
-
-        if (response.data.success) {
-            alert('Account created!');
-            setName('');
-            setEmail('');
-            setPassword('');
-            setError(null);
-
-            // Redirect to login page
-            navigate('/login');
-        } else {
-            setError(response.data.message || 'Signup failed.');
+        if (!name || !email || !password || !role) {
+            setError('All fields are required');
+            return;
         }
-    } catch (err) {
-        console.error('Signup error:', err);
-        if (err.response?.data?.message) {
-            setError(err.response.data.message);
-        } else {
-            setError('An error occurred. Please try again later.');
+
+        console.log("Sending data to backend:", { name, email, password, role }); // 🧪 Debug
+
+        try {
+            const response = await axios.post('http://localhost:8000/signup', {
+                name,
+                email,
+                password,
+                role
+            });
+
+            if (response.data.success) {
+                alert('Signup successful!');
+                navigate('/login');
+            } else {
+                setError(response.data.message || 'Signup failed.');
+            }
+        } catch (err) {
+            console.error('Signup error:', err);
+            setError('Signup error.');
         }
-    }
-};
+    };
 
     return (
         <div className="signup-page">
-            <div className="signup-form">
-                <form onSubmit={handleSubmit}>
-                    <h1>Create Account</h1>
-                    <div className="form-group">
-                        <input type="text" placeholder="Name" value={name} onChange={(e) => setName(e.target.value)} />
-                    </div>
-                    <div className="form-group">
-                        <input type="email" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} />
-                    </div>
-                    <div className="form-group">
-                        <input type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} />
-                    </div>
-                    {error && <div className="error-message">{error}</div>}
-                    <button type="submit"  className="btn-submit">Sign Up</button>
-                </form>
-            </div>
+            <form onSubmit={handleSubmit}>
+                <h2>Signup</h2>
+                <input type="text" placeholder="Name" value={name} onChange={(e) => setName(e.target.value)} />
+                <input type="email" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} />
+                <input type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} />
+                <select value={role} onChange={(e) => setRole(e.target.value)}>
+                    <option value="Donor">Donor</option>
+                    <option value="Receiver">Receiver</option>
+                </select>
+                {error && <div className="error">{error}</div>}
+                <button type="submit">Sign Up</button>
+                <p className="login-link">Already registered? <a href="/login">Log In</a></p>
+            </form>
         </div>
     );
 }
