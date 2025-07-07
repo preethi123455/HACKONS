@@ -20,8 +20,7 @@ function SignUp() {
         }
 
         try {
-            const response = await axios.post('https://hackons.onrender.com/signup', {
-
+            const response = await axios.post('http://localhost:8000/signup', {
                 name,
                 email,
                 password,

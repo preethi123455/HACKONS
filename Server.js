@@ -3,88 +3,86 @@ const mongoose = require('mongoose');
 const cors = require('cors');
 const bcrypt = require('bcrypt');
 
+// App config
 const app = express();
+const PORT = 8000;
 
-// ✅ Use dynamic port for Render, fallback to 8000 locally
-const PORT = process.env.PORT || 8000;
-
-// ✅ Middleware
+// Middleware
 app.use(cors());
 app.use(express.json());
 
-// ✅ MongoDB connection
-mongoose.connect("mongodb+srv://preethiusha007:hvvhoiyI9veeJSVN@cluster0.cadjnlq.mongodb.net/grocery?retryWrites=true&w=majority&appName=Cluster0")
-    .then(() => console.log("✅ MongoDB connected"))
-    .catch(err => console.error("❌ MongoDB connection error:", err));
+// MongoDB connection
+const MONGO_URI = "mongodb+srv://preethiusha007:hvvhoiyI9veeJSVN@cluster0.cadjnlq.mongodb.net/grocery?retryWrites=true&w=majority&appName=Cluster0";
 
-// ✅ Schema & Model
+mongoose.connect(MONGO_URI, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+})
+.then(() => console.log("✅ MongoDB connected"))
+.catch(err => {
+    console.error("❌ MongoDB connection error:", err.message);
+    process.exit(1); // Exit process if DB fails
+});
+
+// Mongoose Schema & Model
 const userSchema = new mongoose.Schema({
-    name: String,
-    email: { type: String, unique: true },
-    password: String,
-    role: String
+    name: { type: String, required: true },
+    email: { type: String, unique: true, required: true },
+    password: { type: String, required: true },
+    role: { type: String, default: 'user' }
 });
 
 const User = mongoose.model('User', userSchema);
 
-// ✅ Signup Route
+// ======= SIGNUP ROUTE =======
 app.post('/signup', async (req, res) => {
     const { name, email, password, role } = req.body;
-    console.log("📥 Signup request received:", { name, email, role });
 
     try {
-        const existing = await User.findOne({ email });
-        if (existing) {
+        const existingUser = await User.findOne({ email });
+        if (existingUser) {
             return res.status(400).json({ success: false, message: 'User already exists' });
         }
 
         const hashedPassword = await bcrypt.hash(password, 10);
-
-        const newUser = new User({
-            name,
-            email,
-            password: hashedPassword,
-            role
-        });
-
+        const newUser = new User({ name, email, password: hashedPassword, role });
         await newUser.save();
-        console.log("✅ User saved:", newUser.email);
 
-        res.json({ success: true, message: 'User created successfully' });
+        console.log("✅ User registered:", email);
+        res.status(201).json({ success: true, message: 'User created successfully' });
     } catch (err) {
-        console.error("❌ Signup error:", err);
+        console.error("❌ Signup error:", err.message);
         res.status(500).json({ success: false, message: 'Signup failed' });
     }
 });
 
-// ✅ Login Route
+// ======= LOGIN ROUTE =======
 app.post('/login', async (req, res) => {
     const { email, password } = req.body;
-    console.log("📥 Login attempt:", email);
 
     try {
         const user = await User.findOne({ email });
         if (!user) {
-            return res.status(400).json({ success: false, message: 'User not found' });
+            return res.status(404).json({ success: false, message: 'User not found' });
         }
 
-        const match = await bcrypt.compare(password, user.password);
-        if (!match) {
+        const isMatch = await bcrypt.compare(password, user.password);
+        if (!isMatch) {
             return res.status(401).json({ success: false, message: 'Invalid credentials' });
         }
 
-        res.json({
+        res.status(200).json({
             success: true,
             message: 'Login successful',
-            role: user.role // 🎯 Frontend uses this for role-based redirection
+            role: user.role
         });
     } catch (err) {
-        console.error('❌ Login error:', err);
+        console.error("❌ Login error:", err.message);
         res.status(500).json({ success: false, message: 'Login failed' });
     }
 });
 
-// ✅ Start the server
+// Start server
 app.listen(PORT, () => {
-    console.log(`🚀 Server running on port ${PORT}`);
+    console.log(`🚀 Server running on http://localhost:${PORT}`);
 });
