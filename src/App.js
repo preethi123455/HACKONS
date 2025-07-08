@@ -33,6 +33,7 @@ function App() {
         <Route path="/sarticle" element={<Sarticle />} />
         <Route path="/Tarticle" element={<Tarticle />} />
         <Route path="/logout" element={<Landing />} />
+        <Route path="/chatbot" element={<Chatbot />} />
       
 
         {/* Receiver Feature Routes */}
