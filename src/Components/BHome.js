@@ -1,293 +1,200 @@
-// import React, { useState } from 'react';
-// import '../Styles/BHome.css';
-// import { useNavigate } from 'react-router-dom';
-// import ScienceArticle from './ScienceArticle';
-// import BloodTypeCompatibility from './BloodTypeCompatibility';
-// import DonationPreparation from './DonationPreparation';
-
-// const BHome = () => {
-//   const navigate = useNavigate();
-
-//   const [form, setForm] = useState({
-//     name: '',
-//     location: '',
-//     bloodAvailability: '',
-//   });
-
-//   const handleChange = (e) => {
-//     setForm({ ...form, [e.target.name]: e.target.value });
-//   };
-
-//   const handleSubmit = (e) => {
-//     e.preventDefault();
-//     alert("Blood Bank Registered Successfully!");
-//     setForm({ name: '', location: '', bloodAvailability: '' });
-//   };
-
-//   return (
-//     <div className="bhome-container">
-//       {/* Navbar */}
-//       <nav className="navbar">
-//         <div className="logo">❤️ BloodLink</div>
-//         <ul className="nav-links">
-//           <li><a href="#about">About</a></li>
-//           <li><a href="#services">Services</a></li>
-//           <li><a href="#blog">Blog</a></li>
-//           <li><a href="#register">Register</a></li>
-//           <li><a href="#contact">Contact</a></li>
-//         </ul>
-//         <button className="cta-btn">Donate Now</button>
-//       </nav>
-
-//       {/* Hero Section */}
-//       <header className="hero">
-//         <div className="hero-text">
-//           <h1>Save Lives, <span>Donate Blood</span></h1>
-//           <p>
-//             Join thousands of heroes who donate blood regularly. Your contribution
-//             can save up to three lives and make a lasting impact in your community.
-//           </p>
-//           <div className="hero-buttons">
-//             <button className="primary-btn">Start Donating →</button>
-//             <button className="outline-btn">Learn More</button>
-//           </div>
-//         </div>
-//         <div className="hero-image">
-//           <img
-//             src="https://media.istockphoto.com/id/2154964150/photo/the-concept-of-donation-blood-transfusion.jpg?s=612x612&w=0&k=20&c=EPcXA2NNoTk6vRYRDIwAgXf9UFMKu1K2nlnCzoRtD64="
-//             alt="Hero"
-//             style={{ width: '100%', height: '100%', borderRadius: '12px', objectFit: 'cover' }}
-//           />
-//         </div>
-//       </header>
-
-//       {/* Features */}
-//       <section className="features" id="services">
-//         <h2>Why Choose BloodLink?</h2>
-//         <p>We provide a secure, efficient, and reliable platform connecting donors with those in need.</p>
-//         <div className="feature-cards">
-//           <div className="card">
-          
-//             <h3>🔒 Secure & Safe</h3>
-//             <p>Advanced security measures and screening protocols ensure complete safety.</p>
-//           </div>
-//           <div className="card">
-           
-//             <h3>⏱️ 24/7 Availability</h3>
-//             <p>Round-the-clock emergency support and blood supply system.</p>
-//           </div>
-//           <div className="card">
-            
-//             <h3>🏥 Certified Excellence</h3>
-//             <p>Accredited facilities with top medical standards and service.</p>
-//           </div>
-//         </div>
-//       </section>
-
-//       {/* Statistics */}
-//       <section className="stats">
-//         <div>
-//           <h2>❤️ 50K+</h2>
-//           <p>Lives Saved</p>
-//         </div>
-//         <div>
-//           <h2>🧑 25K+</h2>
-//           <p>Active Donors</p>
-//         </div>
-//         <div>
-//           <h2>🏥 500+</h2>
-//           <p>Partner Hospitals</p>
-//         </div>
-//         <div>
-//           <h2>✅ 99.9%</h2>
-//           <p>Success Rate</p>
-//         </div>
-//       </section>
-
-//       {/* Blog Articles */}
-//       <section className="blog-section" id="blog">
-//         <h2>Latest Articles</h2>
-//         <p>Stay informed with our latest insights and updates</p>
-//         <div className="blog-cards">
-//           <div className="blog-card">
-            
-//             <h4>The Science Behind Blood Donation</h4>
-//             <button className="read-btn" onClick={() => navigate('/farticle')}>Read More →</button>
-//           </div>
-//           <div className="blog-card">
-//             <img src="https://media.istockphoto.com/id/1291577428/vector/blood-group-compatibility-chart-with-universal-donor-0-and-universal-recipient-ab-concerning.jpg?s=612x612&w=0&k=20&c=LuiLsoXn_JOPaqK-WWLN0pOLQkLTtm-2sVJ36B2yTZ0=" alt="Article 2" className="image-placeholder" style={{ width: '100%', borderRadius: '10px' }} />
-//             <h4>Blood Type Compatibility Made Simple</h4>
-//             <button className="read-btn" onClick={() => navigate('/sarticle')}>Read More →</button>
-//           </div>
-//           <div className="blog-card">
-//             <img src="https://media.istockphoto.com/id/1445531404/photo/world-blood-donation-donor-day-and-save-life.jpg?s=612x612&w=0&k=20&c=BWWNmtNDQgd4kYClYJAEf9sH3W5gxeC46zUz0c9vfpg=" alt="Article 3" className="image-placeholder" style={{ width: '100%', borderRadius: '10px' }} />
-//             <h4>Preparing for Your Donation Day</h4>
-//             <button className="read-btn" onClick={() => navigate('/tarticle')}>Read More →</button>
-//           </div>
-//         </div>
-//       </section>
-
-//       {/* Registration */}
-//       <section className="register-section" id="register">
-//         <h2>Register Your Blood Bank</h2>
-//         <p>Join our network and help save more lives</p>
-//         <form onSubmit={handleSubmit}>
-//           <input type="text" name="name" placeholder="Blood Bank Name" value={form.name} onChange={handleChange} required />
-//           <input type="text" name="location" placeholder="Location" value={form.location} onChange={handleChange} required />
-//           <textarea name="bloodAvailability" placeholder="Available Blood Groups (e.g. A+, B-)" value={form.bloodAvailability} onChange={handleChange} required />
-//           <button type="submit">Register Blood Bank</button>
-//         </form>
-//       </section>
-
-//       {/* Testimonials */}
-//       <section className="testimonials">
-//         <h2>What Our Community Says</h2>
-//         <div className="testimonial-cards">
-//           <div className="testimonial">
-//             <p>"BloodLink has transformed our hospital’s blood management system. The efficiency is amazing!"</p>
-//             <strong>– Dr. Sarah Mathews</strong>
-//           </div>
-//           <div className="testimonial">
-//             <p>"The donation process is easier and the results are incredibly streamlined. I'm proud to be a donor."</p>
-//             <strong>– Jason Rodriguez</strong>
-//           </div>
-//           <div className="testimonial">
-//             <p>"Managing inventory and connecting with donors has never been easier. The platform is top-notch!"</p>
-//             <strong>– Lisa Chen</strong>
-//           </div>
-//         </div>
-//       </section>
-
-//       {/* Contact */}
-//       <section className="contact" id="contact">
-//         <h2>Get in Touch</h2>
-//         <p>support@bloodlink.org | +91 98765 43210</p>
-//         <button className="cta-btn">Contact Support</button>
-//       </section>
-
-//       {/* Footer */}
-//       <footer className="footer">
-//         <p>© 2025 BloodLink | All Rights Reserved</p>
-//       </footer>
-//     </div>
-//   );
-// };
-
-// export default BHome;
-
-// src/components/BHome.js
-import React, { useState } from 'react';
-import '../Styles/BHome.css';
-import { useNavigate } from 'react-router-dom';
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import "../Styles/BHome.css";
 
 const BHome = () => {
+  const [location, setLocation] = useState("");
+  const [bloodData, setBloodData] = useState([
+    { bloodGroup: "A+", units: 0 },
+    { bloodGroup: "A-", units: 0 },
+    { bloodGroup: "B+", units: 0 },
+    { bloodGroup: "B-", units: 0 },
+    { bloodGroup: "AB+", units: 0 },
+    { bloodGroup: "AB-", units: 0 },
+    { bloodGroup: "O+", units: 0 },
+    { bloodGroup: "O-", units: 0 },
+  ]);
+  const [message, setMessage] = useState("");
+
   const navigate = useNavigate();
+  const userId = localStorage.getItem("userId");
+  const email = localStorage.getItem("email");
 
-  const [form, setForm] = useState({
-    name: '',
-    address: '',
-    bloodGroup: '',
-    units: ''
-  });
-
-  const handleChange = (e) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
+  const handleUnitsChange = (index, value) => {
+    const updated = [...bloodData];
+    updated[index].units = parseInt(value, 10);
+    setBloodData(updated);
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    const storedEmail = localStorage.getItem('userEmail'); // ✅ fixed key
-
-    if (!storedEmail) {
-      alert('⚠️ You must be logged in to register a blood bank.');
-      navigate('/login');
-      return;
-    }
-
-    if (!form.name || !form.address || !form.bloodGroup || !form.units) {
-      alert("❗ Please fill in all fields.");
-      return;
-    }
+    const name = "Blood Bank - " + email.split("@")[0];
 
     try {
-      const res = await fetch('http://localhost:8000/register-bloodbank', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          name: form.name,
-          location: form.address,
-          email: storedEmail,
-          bloodAvailability: [
-            {
-              bloodGroup: form.bloodGroup,
-              units: parseInt(form.units, 10)
-            }
-          ]
-        })
+      const response = await axios.post("http://localhost:8000/register-bloodbank", {
+        name,
+        location,
+        bloodAvailability: bloodData,
+        userId,
+        email,
       });
 
-      const data = await res.json();
-
-      if (res.ok) {
-        alert(data.message);
-        setForm({
-          name: '',
-          address: '',
-          bloodGroup: '',
-          units: ''
-        });
+      if (response.data.success) {
+        setMessage("✅ Blood bank data submitted successfully.");
+        setLocation("");
+        setBloodData((prev) => prev.map((b) => ({ ...b, units: 0 })));
       } else {
-        alert(data.message || 'Failed to register blood bank.');
+        setMessage("❌ Submission failed.");
       }
     } catch (error) {
-      console.error('Error registering blood bank:', error);
-      alert('❌ Server error. Try again later.');
+      console.error("Error submitting blood bank:", error);
+      setMessage("❌ Server error. Please try again.");
     }
   };
 
   return (
     <div className="bhome-container">
-      {/* Registration Section */}
-      <section className="register-section" id="register">
-        <h2>Register Your Blood Bank</h2>
-        <p>Join our network and help save more lives</p>
-        <form onSubmit={handleSubmit}>
-          <input
-            type="text"
-            name="name"
-            placeholder="Blood Bank Name"
-            value={form.name}
-            onChange={handleChange}
-            required
-          />
-          <input
-            type="text"
-            name="address"
-            placeholder="Address"
-            value={form.address}
-            onChange={handleChange}
-            required
-          />
-          <input
-            type="text"
-            name="bloodGroup"
-            placeholder="Blood Group (e.g. A+)"
-            value={form.bloodGroup}
-            onChange={handleChange}
-            required
-          />
-          <input
-            type="number"
-            name="units"
-            placeholder="Units of Stock Available"
-            value={form.units}
-            onChange={handleChange}
-            required
-          />
-          <button type="submit">Register Blood Bank</button>
+      {/* Navbar */}
+      <nav className="navbar">
+        <div className="navbar-logo">🩸 BloodLink</div>
+        <ul className="navbar-links">
+          <li onClick={() => navigate("/")}>Home</li>
+          <li onClick={() => navigate("/donate")}>Donate</li>
+          <li onClick={() => navigate("/learn")}>Learn</li>
+          <li onClick={() => navigate("/contact")}>Contact</li>
+        </ul>
+      </nav>
+
+      {/* Hero Section */}
+      <div className="bhome-design">
+        <h2 className="headline">
+          Save Lives, <span className="highlight">Donate Blood</span>
+        </h2>
+        <p className="subtext">
+          Join thousands of heroes who donate blood regularly. Your contribution can
+          save up to three lives and make a lasting impact in your community.
+        </p>
+        <div className="button-group">
+          <button className="start-donating">Start Donating →</button>
+          <button className="learn-more">Learn More</button>
+        </div>
+
+        {/* Features */}
+        <div className="why-choose">
+          <h3>Why Choose BloodLink?</h3>
+          <div className="features">
+            <div className="feature-card">
+              <h4>🔒 Secure & Safe</h4>
+              <p>Advanced security and screening protocols ensure complete safety.</p>
+            </div>
+            <div className="feature-card">
+              <h4>🕒 24/7 Availability</h4>
+              <p>Round-the-clock emergency support and supply.</p>
+            </div>
+            <div className="feature-card">
+              <h4>✅ Certified Excellence</h4>
+              <p>Accredited facilities with top medical standards.</p>
+            </div>
+          </div>
+        </div>
+
+        {/* Statistics */}
+        <div className="stats">
+          <div className="stat-item">❤ 50K+<br />Lives Saved</div>
+          <div className="stat-item">🧑‍🤝‍🧑 25K+<br />Active Donors</div>
+          <div className="stat-item">🏥 500+<br />Partner Hospitals</div>
+          <div className="stat-item">✔ 99.99%<br />Success Rate</div>
+        </div>
+
+        {/* Articles */}
+        <div className="latest-articles">
+          <h3>Latest Articles</h3>
+          <div className="articles">
+            <div className="article-card">
+              <img src="/img1.png" alt="Science of Blood Donation" />
+              <p>The Science Behind Blood Donation</p>
+              <a href="#">Read More →</a>
+            </div>
+            <div className="article-card">
+              <img src="/img2.png" alt="Blood Compatibility" />
+              <p>Blood Type Compatibility Made Simple</p>
+              <a href="#">Read More →</a>
+            </div>
+            <div className="article-card">
+              <img src="/img3.png" alt="Donation Prep" />
+              <p>Preparing for Your Donation Day</p>
+              <a href="#">Read More →</a>
+            </div>
+          </div>
+        </div>
+
+        {/* Form */}
+        <h2 className="form-title">Register Blood Bank Availability</h2>
+        <form className="bhome-form" onSubmit={handleSubmit}>
+          <label>
+            Area / Place:
+            <input
+              type="text"
+              value={location}
+              onChange={(e) => setLocation(e.target.value)}
+              required
+            />
+          </label>
+
+          <h4>Blood Group Availability</h4>
+          <div className="blood-groups">
+            {bloodData.map((blood, index) => (
+              <div key={blood.bloodGroup} className="blood-row">
+                <label>{blood.bloodGroup}:</label>
+                <input
+                  type="number"
+                  min="0"
+                  value={blood.units}
+                  onChange={(e) => handleUnitsChange(index, e.target.value)}
+                />
+                <span>units</span>
+              </div>
+            ))}
+          </div>
+
+          <button type="submit">Submit</button>
+          {message && <p className="status-msg">{message}</p>}
         </form>
-      </section>
+
+        
+      </div>
+
+      {/* Chatbot Icon - Fixed at Bottom Right */}
+      <div
+        style={{
+          position: 'fixed',
+          bottom: '20px',
+          right: '20px',
+          backgroundColor: '#6200ea',
+          borderRadius: '50%',
+          width: '65px',
+          height: '65px',
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          boxShadow: '0 6px 12px rgba(0,0,0,0.2)',
+          cursor: 'pointer',
+          zIndex: 1000,
+        }}
+        title="Chat with BloodLink Assistant"
+        onClick={() => navigate('/chatbot')}
+      >
+        <span style={{ fontSize: '30px', color: '#fff' }}>🤖</span>
+      </div>
+      <footer className="footer">
+  <p>Developed by Team BloodLink © 2025</p>
+  <p>
+    <a href="mailto:support@bloodlink.org">Contact Us</a> | 
+    <a href="https://www.bloodlink.org/privacy">Privacy Policy</a>
+  </p>
+</footer>
+
     </div>
   );
 };
