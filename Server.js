@@ -24,17 +24,34 @@ mongoose.connect(MONGO_URI, {
     process.exit(1); // Exit process if DB fails
 });
 
-// Mongoose Schema & Model
+// ========== SCHEMAS & MODELS ==========
+
+// User schema
 const userSchema = new mongoose.Schema({
     name: { type: String, required: true },
     email: { type: String, unique: true, required: true },
     password: { type: String, required: true },
     role: { type: String, default: 'user' }
 });
-
 const User = mongoose.model('User', userSchema);
 
-// ======= SIGNUP ROUTE =======
+// BloodBank schema
+const bloodBankSchema = new mongoose.Schema({
+    name: { type: String, required: true },
+    location: { type: String, required: true },
+    bloodAvailability: [
+        {
+            bloodGroup: { type: String, required: true },
+            units: { type: Number, required: true }
+        }
+    ],
+    userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true }
+});
+const BloodBank = mongoose.model('BloodBank', bloodBankSchema);
+
+// ========== ROUTES ==========
+
+// SIGNUP
 app.post('/signup', async (req, res) => {
     const { name, email, password, role } = req.body;
 
@@ -56,7 +73,7 @@ app.post('/signup', async (req, res) => {
     }
 });
 
-// ======= LOGIN ROUTE =======
+// LOGIN
 app.post('/login', async (req, res) => {
     const { email, password } = req.body;
 
@@ -74,11 +91,34 @@ app.post('/login', async (req, res) => {
         res.status(200).json({
             success: true,
             message: 'Login successful',
-            role: user.role
+            role: user.role,
+            userId: user._id // Send user ID to frontend
         });
     } catch (err) {
         console.error("❌ Login error:", err.message);
         res.status(500).json({ success: false, message: 'Login failed' });
+    }
+});
+
+// REGISTER BLOOD BANK
+app.post('/register-bloodbank', async (req, res) => {
+    const { name, location, bloodAvailability, userId } = req.body;
+
+    try {
+        const newBloodBank = new BloodBank({
+            name,
+            location,
+            bloodAvailability, // Array of { bloodGroup, units }
+            userId
+        });
+
+        await newBloodBank.save();
+
+        console.log("✅ Blood bank registered:", name);
+        res.status(201).json({ success: true, message: 'Blood bank registered successfully' });
+    } catch (err) {
+        console.error("❌ Blood bank registration error:", err.message);
+        res.status(500).json({ success: false, message: 'Failed to register blood bank' });
     }
 });
 
