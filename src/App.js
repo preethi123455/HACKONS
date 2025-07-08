@@ -9,22 +9,38 @@ import Sarticle from "./Components/BloodTypeCompatibility";
 import Tarticle from "./Components/DonationPreparation";
 import Landing from "./Components/LandingPage";
 import Chatbot from "./Components/Chatbot";
+
+
+// Receiver Sub-Components
+import RequestBlood from './Components/RequestBlood';
+import MatchingDonors from './Components/MatchingDonors';
+import RequestHistory from './Components/RequestHistory';
+import ProfileSettings from './Components/ProfileSettings';
+import LandingPage from './Components/LandingPage';
+
 function App() {
   return (
     <Router>
       <Routes>
+        {/* General Routes */}
         <Route path="/" element={<Landing />} />
-          <Route path="/signup" element={<SignUp />} />
+        <Route path="/signup" element={<SignUp />} />
         <Route path="/login" element={<Login />} />
         <Route path="/donor-home" element={<Chatbot />} />
         <Route path="/bloodbank-home" element={<BHome />} />
         <Route path="/receiver-home" element={<RHome />} />
         <Route path="/farticle" element={<Farticle />} />
         <Route path="/sarticle" element={<Sarticle />} />
-        <Route path="/Tarticle" element={<Tarticle />
-      } />
+        <Route path="/Tarticle" element={<Tarticle />} />
+        <Route path="/logout" element={<Landing />} />
+      
 
-      </Routes>
+        {/* Receiver Feature Routes */}
+        <Route path="/request-blood" element={<RequestBlood />} />
+        <Route path="/donors" element={<MatchingDonors />} />
+        <Route path="/history" element={<RequestHistory />} />
+        <Route path="/profile" element={<ProfileSettings />} />
+      </Routes>Tarticle
     </Router>
   );
 }
