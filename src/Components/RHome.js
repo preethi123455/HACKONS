@@ -1,9 +1,59 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../Styles/ReceiverHomepage.css';
+import axios from 'axios';
 
 const ReceiverHomepage = () => {
   const navigate = useNavigate();
+
+  const [formData, setFormData] = useState({
+    name: '',
+    age: '',
+    bloodType: '',
+    hospital: '',
+    contactNumber: '',
+    location: '',
+    urgencyLevel: '',
+  });
+
+  const [loading, setLoading] = useState(false);
+
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const validateForm = () => {
+    const { name, age, bloodType, hospital, contactNumber, location, urgencyLevel } = formData;
+    return name && age && bloodType && hospital && contactNumber && location && urgencyLevel;
+  };
+
+  const submitRequest = async (e) => {
+    e.preventDefault();
+    if (!validateForm()) {
+      alert('Please fill in all fields.');
+      return;
+    }
+
+    try {
+      setLoading(true);
+      const res = await axios.post('http://localhost:5000/api/request-blood', formData);
+      alert(res.data.message || 'Request submitted successfully!');
+      setFormData({
+        name: '',
+        age: '',
+        bloodType: '',
+        hospital: '',
+        contactNumber: '',
+        location: '',
+        urgencyLevel: '',
+      });
+    } catch (err) {
+      console.error('Error submitting request:', err);
+      alert(err.response?.data?.message || 'Failed to submit blood request');
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <div className="receiver-container">
@@ -11,7 +61,6 @@ const ReceiverHomepage = () => {
       <section className="hero-section">
         <div className="hero-content">
           <h1 className="hero-title">RECEIVER</h1>
-          <p className="hero-subtitle"></p>
           <div className="hero-stats">
             <div className="stat-item">
               <span className="stat-number">2</span>
@@ -28,7 +77,7 @@ const ReceiverHomepage = () => {
         </div>
       </section>
 
-      {/* Blood Types Needed Section */}
+      {/* Blood Types Needed */}
       <section className="blood-types-section">
         <div className="section-header">
           <h2>BLOOD TYPES NEEDED</h2>
@@ -39,14 +88,14 @@ const ReceiverHomepage = () => {
             <p className="blood-description">
               Many variables can impact our blood inventories such as weather, holidays or tragic events.
               Every day, patients who need blood are in crisis and <strong>you can help</strong> by volunteering to donate.
-              Less than 10% of the population gives blood, so donors that give on a regular basis are important to meet these needs.
+              Less than 10% of the population gives blood, so regular donors are crucial.
             </p>
             <button className="cta-button" onClick={() => navigate('/book-appointment')}>
               Book an appointment today!
             </button>
           </div>
           <div className="blood-types-grid">
-            {['O+', 'O-', 'A+', 'A-', 'B+', 'B-', 'AB+', 'AB-'].map(type => (
+            {['O+', 'O-', 'A+', 'A-', 'B+', 'B-', 'AB+', 'AB-'].map((type) => (
               <div key={type} className="blood-bag">
                 <div className="bag-icon">{type}</div>
                 <div className="urgency-indicator"></div>
@@ -56,7 +105,7 @@ const ReceiverHomepage = () => {
         </div>
       </section>
 
-      {/* Quick Actions Section */}
+      {/* Quick Actions */}
       <section className="quick-actions-section">
         <div className="section-header">
           <h2>QUICK ACTIONS</h2>
@@ -66,30 +115,31 @@ const ReceiverHomepage = () => {
           <div className="action-card primary" onClick={() => navigate('/request-blood')}>
             <div className="card-icon">🆘</div>
             <h3>Request Blood</h3>
-            <p>Submit a new blood request and get immediate response from available donors.</p>
+            <p>Submit a new blood request and get immediate response from donors.</p>
             <div className="card-arrow">→</div>
           </div>
           <div className="action-card" onClick={() => navigate('/matching-donors')}>
             <div className="card-icon">🔍</div>
             <h3>Matching Donors</h3>
-            <p>Find the best matching blood donors based on availability and location.</p>
+            <p>Find the best matches based on availability and location.</p>
             <div className="card-arrow">→</div>
           </div>
           <div className="action-card" onClick={() => navigate('/request-history')}>
             <div className="card-icon">📋</div>
             <h3>Request History</h3>
-            <p>Review your previous requests and their statuses.</p>
+            <p>View your previous blood requests and statuses.</p>
             <div className="card-arrow">→</div>
           </div>
           <div className="action-card" onClick={() => navigate('/profile-settings')}>
             <div className="card-icon">⚙️</div>
             <h3>Profile Settings</h3>
-            <p>Update your personal information and preferences.</p>
+            <p>Update personal info and preferences.</p>
             <div className="card-arrow">→</div>
           </div>
         </div>
       </section>
-{/* Chatbot Icon - Fixed at Bottom Right */}
+
+      {/* Chatbot Floating Button */}
       <div
         style={{
           position: 'fixed',
@@ -110,19 +160,43 @@ const ReceiverHomepage = () => {
         onClick={() => navigate('/chatbot')}
       >
         <span style={{ fontSize: '30px', color: '#fff' }}>🤖</span>
-      </div>
+      </div>
+
       {/* Emergency Banner */}
       <section className="emergency-banner">
         <div className="banner-content">
           <div className="banner-icon">🚨</div>
           <div className="banner-text">
             <h3>Emergency Blood Request</h3>
-            <p>Need blood urgently? Our emergency response team is available 24/7</p>
+            <p>Need blood urgently? Our emergency response team is available 24/7.</p>
           </div>
           <button className="emergency-button" onClick={() => navigate('/emergency-request')}>
             Emergency Request
           </button>
         </div>
+      </section>
+
+      {/* Blood Request Form */}
+      <section className="form-section">
+        <h2>Submit a Blood Request</h2>
+        <form onSubmit={submitRequest} className="blood-request-form">
+          <input type="text" name="name" placeholder="Full Name" value={formData.name} onChange={handleChange} />
+          <input type="number" name="age" placeholder="Age" value={formData.age} onChange={handleChange} />
+          <input type="text" name="bloodType" placeholder="Blood Type (e.g. A+)" value={formData.bloodType} onChange={handleChange} />
+          <input type="text" name="hospital" placeholder="Hospital Name" value={formData.hospital} onChange={handleChange} />
+          <input type="text" name="contactNumber" placeholder="Contact Number" value={formData.contactNumber} onChange={handleChange} />
+          <input type="text" name="location" placeholder="City / Location" value={formData.location} onChange={handleChange} />
+          <select name="urgencyLevel" value={formData.urgencyLevel} onChange={handleChange}>
+            <option value="">Select Urgency</option>
+            <option value="Low">Low</option>
+            <option value="Moderate">Moderate</option>
+            <option value="High">High</option>
+            <option value="Emergency">Emergency</option>
+          </select>
+          <button type="submit" className="cta-button" disabled={loading}>
+            {loading ? 'Submitting...' : 'Submit Request'}
+          </button>
+        </form>
       </section>
 
       {/* Footer */}
