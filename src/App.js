@@ -9,6 +9,7 @@ import Sarticle from "./Components/BloodTypeCompatibility";
 import Tarticle from "./Components/DonationPreparation";
 import Landing from "./Components/LandingPage";
 import Chatbot from "./Components/Chatbot";
+import DiffBB from './Components/DiffBB';
 
 
 // Receiver Sub-Components
@@ -34,6 +35,7 @@ function App() {
         <Route path="/Tarticle" element={<Tarticle />} />
         <Route path="/logout" element={<Landing />} />
         <Route path="/chatbot" element={<Chatbot />} />
+         <Route path="/diffbb" element={<DiffBB />} />
       
 
         {/* Receiver Feature Routes */}

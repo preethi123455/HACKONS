@@ -137,6 +137,15 @@ app.get("/fetch-bloodbank", async (req, res) => {
     res.status(500).json({ success: false });
   }
 });
+app.get("/fetch-all-bloodbanks", async (req, res) => {
+  try {
+    const banks = await BloodBank.find({});
+    res.json({ success: true, bloodBanks: banks });
+  } catch (err) {
+    console.error("Fetch all banks error:", err.message);
+    res.status(500).json({ success: false });
+  }
+});
 
 // Start server
 app.listen(PORT, () => {

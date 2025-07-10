@@ -109,7 +109,7 @@ const BHome = () => {
           save up to three lives and make a lasting impact in your community.
         </p>
         <div className="button-group">
-          <button className="start-donating">Start Donating →</button>
+          <li onClick={() => navigate("/diffbb")}><button className="start-donating">Search Blood Banks →</button></li>
           <button className="learn-more">Learn More</button>
         </div>
 
