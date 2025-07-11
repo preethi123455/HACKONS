@@ -10,7 +10,7 @@ import Tarticle from "./Components/DonationPreparation";
 import Landing from "./Components/LandingPage";
 import Chatbot from "./Components/Chatbot";
 import DiffBB from './Components/DiffBB';
-
+import Requesthistory from "./Components/RequestHistory";
 
 // Receiver Sub-Components
 import RequestBlood from './Components/RequestBlood';
@@ -36,6 +36,7 @@ function App() {
         <Route path="/logout" element={<Landing />} />
         <Route path="/chatbot" element={<Chatbot />} />
          <Route path="/diffbb" element={<DiffBB />} />
+         <Route path="/history" element={<RequestHistory />} />
       
 
         {/* Receiver Feature Routes */}
@@ -43,7 +44,7 @@ function App() {
         <Route path="/donors" element={<MatchingDonors />} />
         <Route path="/history" element={<RequestHistory />} />
         <Route path="/profile" element={<ProfileSettings />} />
-      </Routes>Tarticle
+      </Routes>
     </Router>
   );
 }

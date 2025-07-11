@@ -19,52 +19,52 @@ mongoose.connect(MONGO_URI, {
   useUnifiedTopology: true,
 });
 
-mongoose.connection.on('connected', () => {
-  console.log('✅ MongoDB connected');
-});
-mongoose.connection.on('error', (err) => {
-  console.error('❌ MongoDB connection error:', err.message);
-});
+const db = mongoose.connection;
+db.on('connected', () => console.log('✅ MongoDB connected successfully'));
+db.on('error', (err) => console.error('❌ MongoDB connection error:', err.message));
 
 // === Schema & Model ===
-const requestSchema = new mongoose.Schema({
-  patientName: { type: String, required: true },
-  gender: { type: String, required: true },
-  dob: { type: String, required: true },
-  bloodGroup: { type: String, required: true },
+const requestSchema = new mongoose.Schema(
+  {
+    patientName: { type: String, required: true },
+    gender: { type: String, required: true },
+    dob: { type: String, required: true },
+    bloodGroup: { type: String, required: true },
 
-  attendeeName: { type: String, required: true },
-  attendeeMobile: { type: String, required: true },
+    attendeeName: { type: String, required: true },
+    attendeeMobile: { type: String, required: true },
 
-  bloodType: { type: String, required: true },
-  quantity: { type: String, required: true },
-  requiredDate: { type: String, required: true },
+    bloodType: { type: String, required: true },
+    quantity: { type: String, required: true },
+    requiredDate: { type: String, required: true },
 
-  city: { type: String, required: true },
-  donationLocation: { type: String, required: true },
+    city: { type: String, required: true },
+    donationLocation: { type: String, required: true },
 
-  requisitionFile: { type: String, default: '' }, // Optional
-}, { timestamps: true });
+    requisitionFile: { type: String, default: '' },
+  },
+  { timestamps: true }
+);
 
 const BloodRequest = mongoose.models.BloodRequest || mongoose.model('BloodRequest', requestSchema);
 
 // === Routes ===
+
 app.get('/', (req, res) => {
-  res.send('🩸 Blood Request API is running!');
+  res.send('🩸 Blood Request API is live and healthy!');
 });
 
+// === POST: Submit Blood Request ===
 app.post('/api/request-blood', async (req, res) => {
   try {
     const {
       patientName, gender, dob, bloodGroup,
       attendeeName, attendeeMobile,
       bloodType, quantity, requiredDate,
-      city, donationLocation, requisitionFile
+      city, donationLocation, requisitionFile,
     } = req.body;
 
-    console.log('📥 Incoming form data:', req.body);
-
-    // Validate required fields
+    // Basic validation
     if (
       !patientName || !gender || !dob || !bloodGroup ||
       !attendeeName || !attendeeMobile ||
@@ -74,8 +74,8 @@ app.post('/api/request-blood', async (req, res) => {
       return res.status(400).json({ message: '⚠️ All required fields must be filled.' });
     }
 
-    // Save to DB
-    const savedRequest = await BloodRequest.create({
+    // Save request
+    const newRequest = new BloodRequest({
       patientName,
       gender,
       dob,
@@ -90,16 +90,32 @@ app.post('/api/request-blood', async (req, res) => {
       requisitionFile: requisitionFile || '',
     });
 
-    console.log('✅ Saved to DB:', savedRequest);
+    const savedRequest = await newRequest.save();
+    console.log('✅ Blood request saved:', savedRequest);
 
-   res.status(201).json({ message: '✅ Blood request submitted successfully!', data: savedRequest });
- 2  } catch (error) {
-    console.error('❌ Error submitting form:', error.message);
-    res.status(500).json({ message: '❌ Failed to save request.', error: error.message });
+    res.status(201).json({
+      message: '✅ Blood request submitted successfully!',
+      data: savedRequest,
+    });
+
+  } catch (error) {
+    console.error('❌ POST error:', error.message);
+    res.status(500).json({ message: '❌ Failed to submit request.', error: error.message });
+  }
+});
+
+// === GET: Request History ===
+app.get('/api/request-history', async (req, res) => {
+  try {
+    const history = await BloodRequest.find().sort({ createdAt: -1 });
+    res.status(200).json({ data: history });
+  } catch (error) {
+    console.error('❌ GET /request-history error:', error.message);
+    res.status(500).json({ message: 'Failed to fetch history', error: error.message });
   }
 });
 
 // === Start Server ===
 app.listen(PORT, () => {
-  console.log(`🚀 Server running on http://localhost:${PORT}`);
+  console.log(`🚀 Server is running on: http://localhost:${PORT}`);
 });

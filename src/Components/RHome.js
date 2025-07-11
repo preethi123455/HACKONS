@@ -124,7 +124,7 @@ const ReceiverHomepage = () => {
             <p>Find the best matches based on availability and location.</p>
             <div className="card-arrow">→</div>
           </div>
-          <div className="action-card" onClick={() => navigate('/request-history')}>
+          <div className="action-card" onClick={() => navigate('/history')}>
             <div className="card-icon">📋</div>
             <h3>Request History</h3>
             <p>View your previous blood requests and statuses.</p>
