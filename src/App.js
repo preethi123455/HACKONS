@@ -28,7 +28,7 @@ function App() {
         <Route path="/" element={<Landing />} />
         <Route path="/signup" element={<SignUp />} />
         <Route path="/login" element={<Login />} />
-        <Route path="/donor-home" element={<Chatbot />} />
+        <Route path="/donor-home" element={<DHome />} />
         <Route path="/bloodbank-home" element={<BHome />} />
         <Route path="/receiver-home" element={<RHome />} />
         <Route path="/farticle" element={<Farticle />} />

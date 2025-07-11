@@ -1,33 +1,75 @@
-/* Home.css */
-
-.home-container {
-    text-align: center;
-    padding: 50px;
-    font-family: 'Segoe UI', sans-serif;
-    background-color: #fff;
-    color: #333;
+/* DonorHome.css */
+.donor-container {
+  background-color: #ffffff;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 2rem;
+  font-family: 'Segoe UI', sans-serif;
 }
 
-.home-container h1 {
-    color: #b30000;
-    margin-bottom: 10px;
+.donor-title {
+  font-size: 2.5rem;
+  color: #b30000;
+  font-weight: bold;
+  margin-bottom: 1rem;
 }
 
-.actions {
-    margin-top: 30px;
+.donor-description {
+  color: #555;
+  max-width: 600px;
+  text-align: center;
+  margin-bottom: 2rem;
 }
 
-.actions button {
-    margin: 10px;
-    padding: 10px 20px;
-    font-size: 16px;
-    background-color: #b30000;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
+.donor-form {
+  background-color: #ffe6e6;
+  border: 1px solid #ffcccc;
+  padding: 2rem;
+  border-radius: 1rem;
+  width: 100%;
+  max-width: 500px;
+  box-shadow: 0px 4px 10px rgba(255, 0, 0, 0.1);
 }
 
-.actions button:hover {
-    background-color: #800000;
+.donor-form label {
+  display: block;
+  margin-bottom: 1rem;
+  color: #b30000;
+  font-weight: 600;
+}
+
+.donor-form input,
+.donor-form select {
+  width: 100%;
+  padding: 0.6rem;
+  border: 1px solid #ff9999;
+  border-radius: 0.5rem;
+  margin-top: 0.3rem;
+  box-sizing: border-box;
+}
+
+.donor-form input:focus,
+.donor-form select:focus {
+  outline: none;
+  border-color: #cc0000;
+  box-shadow: 0 0 0 2px rgba(255, 0, 0, 0.2);
+}
+
+.donor-form button {
+  width: 100%;
+  padding: 0.8rem;
+  background-color: #cc0000;
+  color: white;
+  font-weight: bold;
+  border: none;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  margin-top: 1rem;
+  transition: background-color 0.3s ease;
+}
+
+.donor-form button:hover {
+  background-color: #a10000;
 }
