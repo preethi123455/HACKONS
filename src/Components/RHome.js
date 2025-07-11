@@ -130,10 +130,10 @@ const ReceiverHomepage = () => {
             <p>View your previous blood requests and statuses.</p>
             <div className="card-arrow">→</div>
           </div>
-          <div className="action-card" onClick={() => navigate('/profile-settings')}>
-            <div className="card-icon">⚙️</div>
-            <h3>Profile Settings</h3>
-            <p>Update personal info and preferences.</p>
+          <div className="action-card" onClick={() => navigate('/bankdetails')}>
+            <div className="card-icon">🩸</div>
+            <h3>Find BloodBank</h3>
+            <p>Find Donators[BloodBanks]</p>
             <div className="card-arrow">→</div>
           </div>
         </div>
@@ -170,34 +170,13 @@ const ReceiverHomepage = () => {
             <h3>Emergency Blood Request</h3>
             <p>Need blood urgently? Our emergency response team is available 24/7.</p>
           </div>
-          <button className="emergency-button" onClick={() => navigate('/emergency-request')}>
+          <button className="emergency-button" onClick={() => navigate('/emergency')}>
             Emergency Request
           </button>
         </div>
       </section>
 
-      {/* Blood Request Form */}
-      <section className="form-section">
-        <h2>Submit a Blood Request</h2>
-        <form onSubmit={submitRequest} className="blood-request-form">
-          <input type="text" name="name" placeholder="Full Name" value={formData.name} onChange={handleChange} />
-          <input type="number" name="age" placeholder="Age" value={formData.age} onChange={handleChange} />
-          <input type="text" name="bloodType" placeholder="Blood Type (e.g. A+)" value={formData.bloodType} onChange={handleChange} />
-          <input type="text" name="hospital" placeholder="Hospital Name" value={formData.hospital} onChange={handleChange} />
-          <input type="text" name="contactNumber" placeholder="Contact Number" value={formData.contactNumber} onChange={handleChange} />
-          <input type="text" name="location" placeholder="City / Location" value={formData.location} onChange={handleChange} />
-          <select name="urgencyLevel" value={formData.urgencyLevel} onChange={handleChange}>
-            <option value="">Select Urgency</option>
-            <option value="Low">Low</option>
-            <option value="Moderate">Moderate</option>
-            <option value="High">High</option>
-            <option value="Emergency">Emergency</option>
-          </select>
-          <button type="submit" className="cta-button" disabled={loading}>
-            {loading ? 'Submitting...' : 'Submit Request'}
-          </button>
-        </form>
-      </section>
+      
 
       {/* Footer */}
       <footer className="receiver-footer">

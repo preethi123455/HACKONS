@@ -11,7 +11,8 @@ import Landing from "./Components/LandingPage";
 import Chatbot from "./Components/Chatbot";
 import DiffBB from './Components/DiffBB';
 import Requesthistory from "./Components/RequestHistory";
-
+import Bankdetails from "./Components/Blood-bank-details";
+import Emergency  from './Components/Emergency';
 // Receiver Sub-Components
 import RequestBlood from './Components/RequestBlood';
 import MatchingDonors from './Components/MatchingDonors';
@@ -37,6 +38,8 @@ function App() {
         <Route path="/chatbot" element={<Chatbot />} />
          <Route path="/diffbb" element={<DiffBB />} />
          <Route path="/history" element={<RequestHistory />} />
+         <Route path="/bankdetails" element={<Bankdetails />} />
+         <Route path="/emergency" element={<Emergency />} />
       
 
         {/* Receiver Feature Routes */}
