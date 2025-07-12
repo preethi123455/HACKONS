@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom'; // ✅ Import navigate
+import { useNavigate } from 'react-router-dom';
 import '../Styles/DHome.css';
 
 const DonorHome = () => {
@@ -12,7 +12,7 @@ const DonorHome = () => {
     phone: '',
   });
 
-  const navigate = useNavigate(); // ✅ Initialize navigate
+  const navigate = useNavigate();
 
   const handleChange = (e) => {
     const { name, value, files } = e.target;
@@ -34,12 +34,11 @@ const DonorHome = () => {
         phone: formData.phone,
       };
 
-      const response = await axios.post('http://localhost:5000/api/donors', dataToSend);
+      const response = await axios.post('http://localhost:8000/api/donors', dataToSend);
 
-      alert('Form submitted successfully!');
-      console.log('✅ Response:', response.data);
+      alert('✅ Form submitted successfully!');
+      console.log(response.data);
 
-      // Reset the form
       setFormData({
         name: '',
         location: '',
@@ -48,8 +47,8 @@ const DonorHome = () => {
         phone: '',
       });
     } catch (error) {
-      console.error('❌ Submission error:', error.response?.data || error.message);
-      alert('Submission failed. Please check the console.');
+      console.error('❌ Submission error:', error);
+      alert('Submission failed. Check console.');
     }
   };
 
@@ -60,7 +59,6 @@ const DonorHome = () => {
         Thank you for choosing to save lives. Please register your details so we can reach you when needed.
       </p>
 
-      {/* ✅ Floating Chatbot Button */}
       <div
         style={{
           position: 'fixed',

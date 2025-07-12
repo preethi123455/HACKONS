@@ -22,6 +22,8 @@ mongoose.connect(MONGO_URI, {
   process.exit(1);
 });
 
+// ✅ SCHEMAS
+
 const userSchema = new mongoose.Schema({
   name: String,
   email: { type: String, unique: true },
@@ -44,18 +46,29 @@ const bloodBankSchema = new mongoose.Schema({
 });
 const BloodBank = mongoose.model("BloodBank", bloodBankSchema);
 
-// ✅ Configure Nodemailer
+// ✅ Donor Schema
+const donorSchema = new mongoose.Schema({
+  name: { type: String, required: true },
+  location: { type: String, required: true },
+  aadhar: { type: String, required: true },
+  bloodType: { type: String, required: true },
+  phone: { type: String, required: true },
+}, {
+  timestamps: true
+});
+const Donor = mongoose.model("Donor", donorSchema);
+
+// ✅ Nodemailer Setup
 const transporter = nodemailer.createTransport({
   service: "gmail",
   auth: {
-    user: "obupreethig.23cse@kongu.edu",      // ✅ Replace with your email
-    pass: "yapl lbak jons ihtg",              // ✅ Replace with your Gmail App Password
+    user: "obupreethig.23cse@kongu.edu",
+    pass: "yapl lbak jons ihtg",
   },
 });
 
-// Routes
+// ✅ ROUTES
 
-// Signup
 app.post("/signup", async (req, res) => {
   const { name, email, password, role } = req.body;
 
@@ -84,7 +97,6 @@ app.post("/signup", async (req, res) => {
   }
 });
 
-// Login
 app.post("/login", async (req, res) => {
   const { email, password } = req.body;
 
@@ -109,7 +121,6 @@ app.post("/login", async (req, res) => {
   }
 });
 
-// Register Blood Bank
 app.post("/register-bloodbank", async (req, res) => {
   const { name, bloodAvailability, userId, email } = req.body;
 
@@ -134,7 +145,6 @@ app.post("/register-bloodbank", async (req, res) => {
   }
 });
 
-// Fetch blood bank
 app.get("/fetch-bloodbank", async (req, res) => {
   const { userId } = req.query;
   try {
@@ -147,7 +157,6 @@ app.get("/fetch-bloodbank", async (req, res) => {
   }
 });
 
-// Fetch all blood banks
 app.get("/fetch-all-bloodbanks", async (req, res) => {
   try {
     const banks = await BloodBank.find({});
@@ -158,7 +167,26 @@ app.get("/fetch-all-bloodbanks", async (req, res) => {
   }
 });
 
-// 🚨 Emergency Request
+// ✅ Donor Registration Route
+app.post("/api/donors", async (req, res) => {
+  try {
+    const { name, location, aadhar, bloodType, phone } = req.body;
+
+    if (!name || !location || !aadhar || !bloodType || !phone) {
+      return res.status(400).json({ message: "All fields are required." });
+    }
+
+    const newDonor = new Donor({ name, location, aadhar, bloodType, phone });
+    await newDonor.save();
+
+    console.log("✅ Donor saved:", newDonor);
+    res.status(201).json({ message: "Donor registered successfully!" });
+  } catch (error) {
+    console.error("❌ Error saving donor:", error);
+    res.status(500).json({ message: "Internal server error." });
+  }
+});
+
 app.post("/api/emergency-request", async (req, res) => {
   const {
     recipientName,
