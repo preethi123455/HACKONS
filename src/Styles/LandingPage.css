@@ -72,3 +72,18 @@
 .get-started-btn:hover {
   background: #d32f2f;
 }
+.emergency-btn {
+  margin-top: 15px;
+  padding: 12px 25px;
+  background-color: #ff3b3b;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.emergency-btn:hover {
+  background-color: #d63030;
+}

@@ -23,6 +23,10 @@ const LandingPage = () => {
     navigate('/signup');
   };
 
+  const handleEmergency = () => {
+    navigate('/emergency');
+  };
+
   return (
     <div className="landing-container">
       <div className="fade-carousel">
@@ -39,6 +43,9 @@ const LandingPage = () => {
           <p>Connecting donors with lives in need</p>
           <button className="get-started-btn" onClick={handleStart}>
             Get Started →
+          </button>
+          <button className="emergency-btn" onClick={handleEmergency}>
+            Emergency?
           </button>
         </div>
       </div>
