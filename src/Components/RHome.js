@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import '../Styles/ReceiverHomepage.css';
+import '../Styles/DHome.css';
 import axios from 'axios';
 
 const ReceiverHomepage = () => {
@@ -61,16 +61,7 @@ const ReceiverHomepage = () => {
       <section className="hero-section">
         <div className="hero-content">
           <h1 className="hero-title">RECEIVER</h1>
-          <div className="hero-stats">
-            <div className="stat-item">
-              <span className="stat-number">2</span>
-              <span className="stat-label">Active Requests</span>
-            </div>
-            <div className="stat-item">
-              <span className="stat-number">3</span>
-              <span className="stat-label">Days Since Last Donation</span>
-            </div>
-          </div>
+
         </div>
         <div className="hero-image">
           <div className="blood-drop-icon">🩸</div>
@@ -90,9 +81,7 @@ const ReceiverHomepage = () => {
               Every day, patients who need blood are in crisis and <strong>you can help</strong> by volunteering to donate.
               Less than 10% of the population gives blood, so regular donors are crucial.
             </p>
-            <button className="cta-button" onClick={() => navigate('/book-appointment')}>
-              Book an appointment today!
-            </button>
+            
           </div>
           <div className="blood-types-grid">
             {['O+', 'O-', 'A+', 'A-', 'B+', 'B-', 'AB+', 'AB-'].map((type) => (
@@ -118,7 +107,7 @@ const ReceiverHomepage = () => {
             <p>Submit a new blood request and get immediate response from donors.</p>
             <div className="card-arrow">→</div>
           </div>
-          <div className="action-card" onClick={() => navigate('/matching-donors')}>
+          <div className="action-card" onClick={() => navigate('/matchdonors')}>
             <div className="card-icon">🔍</div>
             <h3>Matching Donors</h3>
             <p>Find the best matches based on availability and location.</p>
@@ -134,6 +123,12 @@ const ReceiverHomepage = () => {
             <div className="card-icon">🩸</div>
             <h3>Find BloodBank</h3>
             <p>Find Donators[BloodBanks]</p>
+            <div className="card-arrow">→</div>
+          </div>
+          <div className="action-card" onClick={() => navigate('/donordetails')}>
+            <div className="card-icon">🩸</div>
+            <h3>Find Donors(individual)</h3>
+            <p>Find Donors?</p>
             <div className="card-arrow">→</div>
           </div>
         </div>
@@ -181,11 +176,6 @@ const ReceiverHomepage = () => {
       {/* Footer */}
       <footer className="receiver-footer">
         <div className="footer-content">
-          <div className="footer-stats">
-            <span>2 Active Blood Requests</span>
-            <span>Last Donation Received: 3 Days Ago</span>
-            <span>No new alerts</span>
-          </div>
           <div className="footer-links">
             <span>© 2025 BloodBank Platform</span>
             <a href="/help">Help</a>

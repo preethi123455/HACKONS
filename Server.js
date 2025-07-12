@@ -10,6 +10,7 @@ const PORT = 8000;
 app.use(cors());
 app.use(express.json());
 
+// ✅ MongoDB Connection
 const MONGO_URI = "mongodb+srv://preethiusha007:hvvhoiyI9veeJSVN@cluster0.cadjnlq.mongodb.net/grocery?retryWrites=true&w=majority&appName=Cluster0";
 
 mongoose.connect(MONGO_URI, {
@@ -22,7 +23,7 @@ mongoose.connect(MONGO_URI, {
   process.exit(1);
 });
 
-// ✅ SCHEMAS
+// ✅ Schemas and Models
 
 const userSchema = new mongoose.Schema({
   name: String,
@@ -46,16 +47,13 @@ const bloodBankSchema = new mongoose.Schema({
 });
 const BloodBank = mongoose.model("BloodBank", bloodBankSchema);
 
-// ✅ Donor Schema
 const donorSchema = new mongoose.Schema({
   name: { type: String, required: true },
   location: { type: String, required: true },
   aadhar: { type: String, required: true },
   bloodType: { type: String, required: true },
   phone: { type: String, required: true },
-}, {
-  timestamps: true
-});
+}, { timestamps: true });
 const Donor = mongoose.model("Donor", donorSchema);
 
 // ✅ Nodemailer Setup
@@ -63,12 +61,13 @@ const transporter = nodemailer.createTransport({
   service: "gmail",
   auth: {
     user: "obupreethig.23cse@kongu.edu",
-    pass: "yapl lbak jons ihtg",
+    pass: "yapl lbak jons ihtg", // ❗ Use environment variables in production
   },
 });
 
-// ✅ ROUTES
+// ✅ Routes
 
+// Signup
 app.post("/signup", async (req, res) => {
   const { name, email, password, role } = req.body;
 
@@ -97,6 +96,7 @@ app.post("/signup", async (req, res) => {
   }
 });
 
+// Login
 app.post("/login", async (req, res) => {
   const { email, password } = req.body;
 
@@ -121,6 +121,7 @@ app.post("/login", async (req, res) => {
   }
 });
 
+// Register or update blood bank
 app.post("/register-bloodbank", async (req, res) => {
   const { name, bloodAvailability, userId, email } = req.body;
 
@@ -145,18 +146,19 @@ app.post("/register-bloodbank", async (req, res) => {
   }
 });
 
+// Fetch one blood bank
 app.get("/fetch-bloodbank", async (req, res) => {
   const { userId } = req.query;
   try {
     const bank = await BloodBank.findOne({ userId });
-    if (!bank) return res.json({ success: true, bloodAvailability: [] });
-    res.json({ success: true, bloodAvailability: bank.bloodAvailability });
+    res.json({ success: true, bloodAvailability: bank?.bloodAvailability || [] });
   } catch (err) {
     console.error("Fetch error:", err.message);
     res.status(500).json({ success: false });
   }
 });
 
+// Fetch all blood banks
 app.get("/fetch-all-bloodbanks", async (req, res) => {
   try {
     const banks = await BloodBank.find({});
@@ -167,18 +169,16 @@ app.get("/fetch-all-bloodbanks", async (req, res) => {
   }
 });
 
-// ✅ Donor Registration Route
+// ✅ Donor Registration
 app.post("/api/donors", async (req, res) => {
+  const { name, location, aadhar, bloodType, phone } = req.body;
+  if (!name || !location || !aadhar || !bloodType || !phone) {
+    return res.status(400).json({ message: "All fields are required." });
+  }
+
   try {
-    const { name, location, aadhar, bloodType, phone } = req.body;
-
-    if (!name || !location || !aadhar || !bloodType || !phone) {
-      return res.status(400).json({ message: "All fields are required." });
-    }
-
     const newDonor = new Donor({ name, location, aadhar, bloodType, phone });
     await newDonor.save();
-
     console.log("✅ Donor saved:", newDonor);
     res.status(201).json({ message: "Donor registered successfully!" });
   } catch (error) {
@@ -187,6 +187,18 @@ app.post("/api/donors", async (req, res) => {
   }
 });
 
+// ✅ Fetch All Donors — 🔧 ADDED THIS
+app.get("/api/donors", async (req, res) => {
+  try {
+    const donors = await Donor.find({});
+    res.status(200).json({ success: true, donors });
+  } catch (err) {
+    console.error("❌ Error fetching donors:", err.message);
+    res.status(500).json({ success: false, message: "Failed to fetch donors" });
+  }
+});
+
+// Emergency request
 app.post("/api/emergency-request", async (req, res) => {
   const {
     recipientName,
@@ -233,7 +245,7 @@ Contact Number: ${mobileNumber}
 Place: ${place}
 
 Please respond immediately if you can help.
-        `
+        `,
       };
 
       try {
@@ -246,15 +258,15 @@ Please respond immediately if you can help.
 
     res.status(200).json({
       message: `Emergency request sent to ${sentTo.length} blood bank(s) in ${place}.`,
-      sentTo
+      sentTo,
     });
-
   } catch (err) {
     console.error("Emergency request error:", err.message);
     res.status(500).json({ message: "Server error while processing emergency request" });
   }
 });
 
+// Start server
 app.listen(PORT, () => {
   console.log(`🚀 Server running on http://localhost:${PORT}`);
 });

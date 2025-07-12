@@ -121,11 +121,6 @@ const ReceiverHomepage = () => {
       {/* Footer */}
       <footer className="receiver-footer">
         <div className="footer-content">
-          <div className="footer-stats">
-            <span>2 Active Blood Requests</span>
-            <span>Last Donation Received: 3 Days Ago</span>
-            <span>No new alerts</span>
-          </div>
           <div className="footer-links">
             <span>© 2025 BloodBank Platform</span>
             <a href="/help">Help</a>

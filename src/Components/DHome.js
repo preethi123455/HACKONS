@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
-import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 import '../Styles/DHome.css';
 
-const DonorHome = () => {
+const BloodLinkHome = () => {
   const [formData, setFormData] = useState({
     name: '',
     location: '',
@@ -12,6 +12,7 @@ const DonorHome = () => {
     phone: '',
   });
 
+  const [showForm, setShowForm] = useState(false);
   const navigate = useNavigate();
 
   const handleChange = (e) => {
@@ -24,7 +25,6 @@ const DonorHome = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     try {
       const dataToSend = {
         name: formData.name,
@@ -35,7 +35,6 @@ const DonorHome = () => {
       };
 
       const response = await axios.post('http://localhost:8000/api/donors', dataToSend);
-
       alert('✅ Form submitted successfully!');
       console.log(response.data);
 
@@ -46,6 +45,7 @@ const DonorHome = () => {
         bloodType: '',
         phone: '',
       });
+      setShowForm(false);
     } catch (error) {
       console.error('❌ Submission error:', error);
       alert('Submission failed. Check console.');
@@ -53,106 +53,177 @@ const DonorHome = () => {
   };
 
   return (
-    <div className="donor-container">
-      <h1 className="donor-title">Welcome Donor ❤️</h1>
-      <p className="donor-description">
-        Thank you for choosing to save lives. Please register your details so we can reach you when needed.
-      </p>
+    <div className="bloodlink-container">
+      {/* Header */}
+      <nav className="navbar">
+        <div className="logo">❤️ BloodLink</div>
+      </nav>
 
+      {/* Hero Section */}
+      <section className="hero">
+        <div className="hero-text">
+          <h1>
+            Be a Hero, <span className="highlight">Donate Blood</span>
+          </h1>
+          <p>
+            Your donation can save up to <strong>3 lives</strong>. Join our community of heroes and
+            make a difference today.
+          </p>
+          <div className="hero-buttons">
+            <button className="register-btn" onClick={() => setShowForm(true)}>
+              Register as Donor
+            </button>
+            <button className="outline-btn" onClick={() => navigate('/bankdetails')}>
+              Find Blood Bank
+            </button>
+          </div>
+        </div>
+        <div className="hero-img">
+          <div className="heart-icon">❤️</div>
+        </div>
+      </section>
+
+      {/* Stats */}
+      <section className="stats">
+        <div><h3>4.5M+</h3><p>Lives Saved</p></div>
+        <div><h3>10K+</h3><p>Active Donors</p></div>
+        <div><h3>24/7</h3><p>Emergency Access</p></div>
+        <div><h3>100%</h3><p>Safe & Verified</p></div>
+      </section>
+
+      {/* Why Donate */}
+      <section className="why-donate">
+        <h2>Why Donate Blood?</h2>
+        <p>Blood donation is a simple act of kindness that goes a long way.</p>
+        <div className="reasons">
+          <div>
+            <h4>💉 Health Check-up</h4>
+            <p>Free health screening before every donation.</p>
+          </div>
+          <div>
+            <h4>❤️ Save Lives</h4>
+            <p>Each donation can save up to 3 lives.</p>
+          </div>
+          <div>
+            <h4>🧬 Health Benefits</h4>
+            <p>Helps reduce iron overload & supports blood flow.</p>
+          </div>
+          <div>
+            <h4>🌍 Community Impact</h4>
+            <p>Be a role model and help your society.</p>
+          </div>
+        </div>
+      </section>
+
+      {/* Blood Facts */}
+      <section className="facts">
+        <h2>Did You Know?</h2>
+        <div className="facts-grid">
+          <p>🩸 Every 2 seconds, someone needs blood.</p>
+          <p>🧍 Only 3% of eligible people donate.</p>
+          <p>🚫 Blood can't be manufactured.</p>
+          <p>🧪 One pint saves 3 lives.</p>
+          <p>⏱ Platelets last 5 days.</p>
+          <p>📦 Red cells last 42 days.</p>
+        </div>
+      </section>
+
+      {/* Donor Form Modal */}
+      {showForm && (
+        <div className="modal-overlay">
+          <div className="modal-content">
+            <span className="close-btn" onClick={() => setShowForm(false)}>
+              ×
+            </span>
+            <h2>Register as a Donor ❤️</h2>
+            <p>Kindly fill in the form to become a lifesaver.</p>
+
+            <form className="donor-form" onSubmit={handleSubmit}>
+              <div className="form-group">
+                <label>Full Name</label>
+                <input
+                  type="text"
+                  name="name"
+                  value={formData.name}
+                  onChange={handleChange}
+                  required
+                  placeholder="Enter full name"
+                />
+              </div>
+
+              <div className="form-group">
+                <label>Location</label>
+                <input
+                  type="text"
+                  name="location"
+                  value={formData.location}
+                  onChange={handleChange}
+                  required
+                  placeholder="Enter your city"
+                />
+              </div>
+
+              <div className="form-group">
+                <label>Aadhaar Proof (PDF/Image)</label>
+                <input
+                  type="file"
+                  name="aadhar"
+                  accept=".pdf, image/*"
+                  onChange={handleChange}
+                />
+              </div>
+
+              <div className="form-group">
+                <label>Blood Type</label>
+                <select
+                  name="bloodType"
+                  value={formData.bloodType}
+                  onChange={handleChange}
+                  required
+                >
+                  <option value="">Select your blood type</option>
+                  <option value="A+">A+</option>
+                  <option value="A-">A−</option>
+                  <option value="B+">B+</option>
+                  <option value="B-">B−</option>
+                  <option value="O+">O+</option>
+                  <option value="O-">O−</option>
+                  <option value="AB+">AB+</option>
+                  <option value="AB-">AB−</option>
+                </select>
+              </div>
+
+              <div className="form-group">
+                <label>Phone Number</label>
+                <input
+                  type="tel"
+                  name="phone"
+                  value={formData.phone}
+                  onChange={handleChange}
+                  required
+                  pattern="[0-9]{10}"
+                  placeholder="Enter 10-digit phone number"
+                />
+              </div>
+
+              <button type="submit" className="submit-btn">
+                Submit
+              </button>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* Chatbot Icon - Fixed Position */}
       <div
-        style={{
-          position: 'fixed',
-          bottom: '20px',
-          right: '20px',
-          backgroundColor: '#6200ea',
-          borderRadius: '50%',
-          width: '65px',
-          height: '65px',
-          display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center',
-          boxShadow: '0 6px 12px rgba(0,0,0,0.2)',
-          cursor: 'pointer',
-          zIndex: 1000,
-        }}
+        className="chatbot-icon"
         title="Chat with BloodLink Assistant"
         onClick={() => navigate('/chatbot')}
       >
-        <span style={{ fontSize: '30px', color: '#fff' }}>🤖</span>
+        <span role="img" aria-label="Chatbot">🤖</span>
       </div>
-
-      <form className="donor-form" onSubmit={handleSubmit}>
-        <label>
-          Full Name
-          <input
-            type="text"
-            name="name"
-            required
-            value={formData.name}
-            onChange={handleChange}
-            placeholder="Enter your full name"
-          />
-        </label>
-
-        <label>
-          Location
-          <input
-            type="text"
-            name="location"
-            required
-            value={formData.location}
-            onChange={handleChange}
-            placeholder="Your city or area"
-          />
-        </label>
-
-        <label>
-          Aadhaar Proof (PDF/Image)
-          <input
-            type="file"
-            name="aadhar"
-            accept=".pdf, image/*"
-            onChange={handleChange}
-          />
-        </label>
-
-        <label>
-          Blood Type
-          <select
-            name="bloodType"
-            required
-            value={formData.bloodType}
-            onChange={handleChange}
-          >
-            <option value="">Select your blood type</option>
-            <option value="A+">A+</option>
-            <option value="A-">A−</option>
-            <option value="B+">B+</option>
-            <option value="B-">B−</option>
-            <option value="O+">O+</option>
-            <option value="O-">O−</option>
-            <option value="AB+">AB+</option>
-            <option value="AB-">AB−</option>
-          </select>
-        </label>
-
-        <label>
-          Phone Number
-          <input
-            type="tel"
-            name="phone"
-            required
-            pattern="[0-9]{10}"
-            value={formData.phone}
-            onChange={handleChange}
-            placeholder="Enter 10-digit mobile number"
-          />
-        </label>
-
-        <button type="submit">Submit</button>
-      </form>
     </div>
   );
 };
 
-export default DonorHome;
+export default BloodLinkHome;

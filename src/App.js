@@ -19,7 +19,8 @@ import MatchingDonors from './Components/MatchingDonors';
 import RequestHistory from './Components/RequestHistory';
 import ProfileSettings from './Components/ProfileSettings';
 import LandingPage from './Components/LandingPage';
-
+import DonorDetails from './Components/Donordetails';
+import MatchDonors from './Components/Matchdonors';
 function App() {
   return (
     <Router>
@@ -40,6 +41,8 @@ function App() {
          <Route path="/history" element={<RequestHistory />} />
          <Route path="/bankdetails" element={<Bankdetails />} />
          <Route path="/emergency" element={<Emergency />} />
+         <Route path="/donordetails" element={<DonorDetails />} />
+         <Route path="/matchdonors" element={<MatchDonors />} />
       
 
         {/* Receiver Feature Routes */}
