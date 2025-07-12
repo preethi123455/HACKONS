@@ -6,6 +6,26 @@
   position: relative;
 }
 
+/* 🏠 Home Icon for Admin Login */
+.home-icon {
+  position: absolute;
+  top: 18px;
+  right: 28px;
+  font-size: 28px;
+  color: #ffffff;
+  background-color: rgba(255, 255, 255, 0.2);
+  padding: 10px;
+  border-radius: 50%;
+  cursor: pointer;
+  z-index: 1000;
+  transition: background 0.3s ease;
+}
+
+.home-icon:hover {
+  background-color: rgba(237, 8, 8, 0.4);
+}
+
+/* === Carousel === */
 .fade-carousel {
   position: relative;
   width: 100%;
@@ -28,6 +48,7 @@
   z-index: 2;
 }
 
+/* === Overlay Content === */
 .overlay {
   position: absolute;
   top: 50%;
@@ -72,6 +93,7 @@
 .get-started-btn:hover {
   background: #d32f2f;
 }
+
 .emergency-btn {
   margin-top: 15px;
   padding: 12px 25px;
