@@ -19,6 +19,7 @@ import MatchingDonors from './Components/MatchingDonors';
 import RequestHistory from './Components/RequestHistory';
 import ProfileSettings from './Components/ProfileSettings';
 import LandingPage from './Components/LandingPage';
+import AdminDashboard from './Components/AdminDashboard';
 
 function App() {
   return (
@@ -40,8 +41,7 @@ function App() {
          <Route path="/history" element={<RequestHistory />} />
          <Route path="/bankdetails" element={<Bankdetails />} />
          <Route path="/emergency" element={<Emergency />} />
-      
-
+          <Route path='/admin' element={<AdminDashboard/>}/>
         {/* Receiver Feature Routes */}
         <Route path="/request-blood" element={<RequestBlood />} />
         <Route path="/donors" element={<MatchingDonors />} />

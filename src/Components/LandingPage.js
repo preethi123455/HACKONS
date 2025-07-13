@@ -15,20 +15,22 @@ const LandingPage = () => {
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrent((prev) => (prev + 1) % images.length);
-    }, 5000); // 5 seconds fade cycle
+    }, 5000);
     return () => clearInterval(interval);
   }, []);
 
-  const handleStart = () => {
-    navigate('/signup');
-  };
-
-  const handleEmergency = () => {
-    navigate('/emergency');
+  const handleAdminLogin = () => {
+    navigate('/admin');
   };
 
   return (
     <div className="landing-container">
+      {/* 🏠 Home Icon */}
+      <div className="home-icon" onClick={handleAdminLogin} title="Admin Login">
+        🏠
+      </div>
+
+      {/* Carousel */}
       <div className="fade-carousel">
         {images.map((src, index) => (
           <div
@@ -41,10 +43,10 @@ const LandingPage = () => {
         <div className="overlay">
           <h1>Welcome to <span>BloodLink</span></h1>
           <p>Connecting donors with lives in need</p>
-          <button className="get-started-btn" onClick={handleStart}>
+          <button className="get-started-btn" onClick={() => navigate('/signup')}>
             Get Started →
           </button>
-          <button className="emergency-btn" onClick={handleEmergency}>
+          <button className="emergency-btn" onClick={() => navigate('/emergency')}>
             Emergency?
           </button>
         </div>
