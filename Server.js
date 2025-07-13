@@ -16,11 +16,11 @@ mongoose.connect(MONGO_URI, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 })
-.then(() => console.log("✅ MongoDB connected"))
-.catch((err) => {
-  console.error("❌ MongoDB connection error:", err.message);
-  process.exit(1);
-});
+  .then(() => console.log("✅ MongoDB connected"))
+  .catch((err) => {
+    console.error("❌ MongoDB connection error:", err.message);
+    process.exit(1);
+  });
 
 // ✅ SCHEMAS
 
@@ -35,18 +35,23 @@ const User = mongoose.model("User", userSchema);
 const bloodBankSchema = new mongoose.Schema({
   name: String,
   location: String,
+  email: String,
+  userId: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
   bloodAvailability: [
     {
       bloodGroup: String,
       units: Number,
+      history: [
+        {
+          date: { type: Date, default: Date.now },
+          change: Number,
+        },
+      ],
     },
   ],
-  userId: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
-  email: String,
 });
 const BloodBank = mongoose.model("BloodBank", bloodBankSchema);
 
-// ✅ Donor Schema
 const donorSchema = new mongoose.Schema({
   name: { type: String, required: true },
   location: { type: String, required: true },
@@ -131,12 +136,66 @@ app.post("/register-bloodbank", async (req, res) => {
     const existing = await BloodBank.findOne({ userId });
 
     if (existing) {
-      existing.bloodAvailability = bloodAvailability;
+      const updatedAvailability = bloodAvailability.map((newEntry) => {
+        const oldEntry = existing.bloodAvailability.find(
+          (b) => b.bloodGroup === newEntry.bloodGroup
+        );
+
+        const oldUnits = oldEntry?.units || 0;
+        const newUnits = newEntry.units;
+        const unitDifference = newUnits - oldUnits;
+
+        let updatedHistory = [...(oldEntry?.history || [])];
+
+        if (unitDifference > 0) {
+          // ➕ Add new stock (FIFO: push to end)
+          updatedHistory.push({
+            date: new Date(),
+            change: unitDifference,
+          });
+        } else if (unitDifference < 0) {
+          // ➖ Remove stock using FIFO (consume from start)
+          let remainingToRemove = -unitDifference;
+
+          while (remainingToRemove > 0 && updatedHistory.length > 0) {
+            const first = updatedHistory[0];
+
+            if (first.change <= remainingToRemove) {
+              remainingToRemove -= first.change;
+              updatedHistory.shift(); // remove first item
+            } else {
+              first.change -= remainingToRemove;
+              remainingToRemove = 0;
+            }
+          }
+        }
+
+        return {
+          bloodGroup: newEntry.bloodGroup,
+          units: newUnits,
+          history: updatedHistory,
+        };
+      });
+
+      existing.bloodAvailability = updatedAvailability;
       await existing.save();
-      return res.status(200).json({ success: true, message: "Blood bank data updated" });
+      return res.status(200).json({ success: true, message: "Blood bank data updated (FIFO)" });
     }
 
-    const newBank = new BloodBank({ name, location: "Unknown", bloodAvailability, userId, email });
+    // New blood bank registration
+    const withHistory = bloodAvailability.map((entry) => ({
+      ...entry,
+      history: entry.units > 0 ? [{ date: new Date(), change: entry.units }] : [],
+    }));
+
+    const newBank = new BloodBank({
+      name,
+      location: "Unknown",
+      bloodAvailability: withHistory,
+      userId,
+      email,
+    });
+
     await newBank.save();
     res.status(201).json({ success: true, message: "Blood bank registered" });
   } catch (err) {
@@ -150,7 +209,13 @@ app.get("/fetch-bloodbank", async (req, res) => {
   try {
     const bank = await BloodBank.findOne({ userId });
     if (!bank) return res.json({ success: true, bloodAvailability: [] });
-    res.json({ success: true, bloodAvailability: bank.bloodAvailability });
+
+    const plainData = bank.bloodAvailability.map(b => ({
+      bloodGroup: b.bloodGroup,
+      units: b.units
+    }));
+
+    res.json({ success: true, bloodAvailability: plainData });
   } catch (err) {
     console.error("Fetch error:", err.message);
     res.status(500).json({ success: false });
@@ -167,7 +232,6 @@ app.get("/fetch-all-bloodbanks", async (req, res) => {
   }
 });
 
-// ✅ Donor Registration Route
 app.post("/api/donors", async (req, res) => {
   try {
     const { name, location, aadhar, bloodType, phone } = req.body;
